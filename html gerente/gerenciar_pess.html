@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Gerenciar Pessoas</title>
+  <link rel="stylesheet" href="../style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+<header class="top-bar">
+  <h1>Gerenciar Pessoas</h1>
+  <div class="top-right-buttons">
+    <button onclick="window.location.href='menu_gerente.html'">Voltar ao Menu</button>
+  </div>
+</header>
+
+<main>
+  <div class="gerenciar-produtos-container">
+    <h2>Cadastro / Edição de Pessoa</h2>
+
+    <button id="selecionar-pessoa-btn" onclick="toggleListaPessoas()">Selecionar Pessoa</button>
+    <ul id="lista-pessoas" style="display:none;"></ul>
+
+    <form id="form-pessoa" onsubmit="salvarPessoa(event)">
+      <label for="pessoa-nome">Nome:</label>
+      <input type="text" id="pessoa-nome" required />
+
+      <label for="pessoa-data">Data de Nascimento:</label>
+      <input type="date" id="pessoa-data" required />
+
+      <label for="pessoa-email">Email:</label>
+      <input type="email" id="pessoa-email" required />
+
+      <label for="pessoa-senha">Senha:</label>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <input type="password" id="pessoa-senha" required />
+        <button type="button" id="toggleSenha" tabindex="-1" style="padding:2px 8px;">👁️</button>
+      </div>
+
+      <label for="pessoa-tipo">Tipo de Usuário:</label>
+      <select id="pessoa-tipo" required>
+        <option value="cliente">Cliente</option>
+        <option value="gerente">Gerente</option>
+      </select>
+
+      <button type="submit">Salvar Pessoa</button>
+      <button type="button" onclick="excluirPessoa()">Excluir Pessoa</button>
+    </form>
+  </div>
+</main>
+
+<script>
+  let pessoas = [];
+  let pessoaEditando = null;
+
+  async function carregarPessoas() {
+    const res = await fetch('http://localhost:3000/api/usuarios');
+    pessoas = await res.json();
+    atualizarListaPessoas();
+  }
+
+  function toggleListaPessoas() {
+    const lista = document.getElementById('lista-pessoas');
+    if (lista.style.display === 'block') {
+      lista.style.display = 'none';
+    } else {
+      carregarPessoas(); // Sempre recarrega do backend ao abrir
+      lista.style.display = 'block';
+    }
+  }
+
+  function atualizarListaPessoas() {
+    const lista = document.getElementById('lista-pessoas');
+    lista.innerHTML = '';
+    pessoas.forEach((pessoa, index) => {
+      const nomeExibir = pessoa.nome ? pessoa.nome : pessoa.email;
+      const li = document.createElement('li');
+      li.textContent = `${nomeExibir} - ${pessoa.perfil}`;
+      li.onclick = () => {
+        carregarPessoa(index);
+        lista.style.display = 'none';
+      };
+      lista.appendChild(li);
+    });
+  }
+
+  function carregarPessoa(index) {
+    const pessoa = pessoas[index];
+    if (pessoa) {
+      pessoaEditando = index;
+      document.getElementById('pessoa-nome').value = pessoa.nome;
+      document.getElementById('pessoa-data').value = pessoa.dataNascimento;
+      document.getElementById('pessoa-email').value = pessoa.email;
+      document.getElementById('pessoa-senha').value = pessoa.senha;
+      document.getElementById('pessoa-tipo').value = pessoa.perfil;
+      document.getElementById('pessoa-email').disabled = true;
+    }
+  }
+
+  async function salvarPessoa(event) {
+    event.preventDefault();
+    if (pessoaEditando === null) {
+      alert('Selecione uma pessoa para editar.');
+      return;
+    }
+    const pessoa = pessoas[pessoaEditando];
+    const nome = document.getElementById('pessoa-nome').value.trim();
+    const dataNascimento = document.getElementById('pessoa-data').value;
+    const email = pessoa.email; // email não pode ser alterado
+    const senha = document.getElementById('pessoa-senha').value;
+    const perfil = document.getElementById('pessoa-tipo').value;
+    if (!nome || !dataNascimento || !email || !senha || !perfil) {
+      alert('Preencha todos os campos corretamente!');
+      return;
+    }
+    const novaPessoa = { nome, dataNascimento, email, senha, perfil };
+    const res = await fetch(`http://localhost:3000/api/usuarios/${encodeURIComponent(email)}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(novaPessoa)
+    });
+    const data = await res.json();
+    if (data.erro) {
+      alert(data.erro);
+    } else {
+      alert(data.mensagem || 'Pessoa atualizada!');
+      limparFormulario();
+      await carregarPessoas();
+    }
+  }
+
+  async function excluirPessoa() {
+    if (pessoaEditando === null) {
+      alert('Selecione uma pessoa para excluir.');
+      return;
+    }
+    const pessoa = pessoas[pessoaEditando];
+    const confirmacao = confirm('Tem certeza que deseja excluir esta pessoa?');
+    if (confirmacao) {
+      const res = await fetch(`http://localhost:3000/api/usuarios/${encodeURIComponent(pessoa.email)}`, { method: 'DELETE' });
+      const data = await res.json();
+      if (data.erro) {
+        alert(data.erro);
+      } else {
+        alert(data.mensagem || 'Pessoa excluída.');
+        limparFormulario();
+        await carregarPessoas();
+      }
+    }
+  }
+
+  function limparFormulario() {
+    pessoaEditando = null;
+    document.getElementById('form-pessoa').reset();
+    document.getElementById('pessoa-email').disabled = false;
+  }
+
+  // Mostrar/ocultar senha
+  document.addEventListener('DOMContentLoaded', function() {
+    const senhaInput = document.getElementById('pessoa-senha');
+    const toggleBtn = document.getElementById('toggleSenha');
+    if (toggleBtn) {
+      toggleBtn.onclick = function() {
+        if (senhaInput.type === 'password') {
+          senhaInput.type = 'text';
+          toggleBtn.textContent = '🙈';
+        } else {
+          senhaInput.type = 'password';
+          toggleBtn.textContent = '👁️';
+        }
+      };
+    }
+  });
+
+  window.addEventListener('DOMContentLoaded', carregarPessoas);
+</script>
+
+</body>
+</html>

@@ -1,0 +1,37 @@
+[
+  {
+    "email": "natalinhasermanovicz@email.com",
+    "senha": "1234",
+    "perfil": "gerente",
+    "nome": "Natália Sermanovicz",
+    "dataNascimento": "2009-08-17"
+  },
+  {
+    "email": "uenerperes@email.com",
+    "senha": "amoaluana",
+    "perfil": "cliente",
+    "nome": "Uener Peres Marcon",
+    "dataNascimento": "2009-05-10"
+  },
+  {
+    "email": "kittymiau@email.com",
+    "senha": "vomiteinacamadonicolas",
+    "perfil": "cliente",
+    "nome": "Kitty Miau",
+    "dataNascimento": "2017-09-15"
+  },
+  {
+    "email": "pablo@email.com",
+    "senha": "china",
+    "perfil": "cliente",
+    "nome": "pablo detoni",
+    "dataNascimento": "2009-03-12"
+  },
+  {
+    "email": "helo@email.com",
+    "senha": "bartgordo",
+    "perfil": "gerente",
+    "nome": "heloyse angelina",
+    "dataNascimento": "2008-07-16"
+  }
+]
