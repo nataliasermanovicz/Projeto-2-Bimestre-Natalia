@@ -33,5 +33,12 @@
     "perfil": "gerente",
     "nome": "heloyse angelina",
     "dataNascimento": "2008-07-16"
+  },
+  {
+    "email": "julia@email.com",
+    "senha": "xuao",
+    "perfil": "cliente",
+    "nome": "julia maria miranda",
+    "dataNascimento": "2008-03-21"
   }
 ]

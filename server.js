@@ -2,6 +2,7 @@ const express = require('express');
 const fs = require('fs');
 const path = require('path');
 const cors = require('cors');
+const axios = require('axios');
 
 const app = express();
 const PORT = 3000;
@@ -10,6 +11,24 @@ const PRODUTOS_FILE = path.join(__dirname, 'produtos.json');
 
 app.use(cors());
 app.use(express.json());
+
+// Rota para baixar imagem de um link e salvar na pasta imgs
+app.post('/api/baixar-imagem', async (req, res) => {
+  const { url } = req.body;
+  if (!url) return res.status(400).json({ erro: 'URL não informada' });
+  try {
+    const response = await axios.get(url, { responseType: 'arraybuffer' });
+    const ext = path.extname(url.split('?')[0]) || '.jpg';
+    const nomeArquivo = 'img_' + Date.now() + ext;
+    const caminhoRelativo = path.join('imgs', nomeArquivo);
+    const caminhoAbsoluto = path.join(__dirname, caminhoRelativo);
+    fs.writeFileSync(caminhoAbsoluto, response.data);
+    res.json({ caminho: '../' + caminhoRelativo.replace(/\\/g, '/') });
+  } catch (err) {
+    res.status(500).json({ erro: 'Falha ao baixar imagem.' });
+  }
+});
+
 
 // Função para ler usuários
 function lerUsuarios() {

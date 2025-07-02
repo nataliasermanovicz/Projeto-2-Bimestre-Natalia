@@ -40,5 +40,19 @@
     "descricao": "Esmalte Verde 'Menta.liza' 8 ml - R$ 15.90",
     "imagem": "../imgs/mentaliza.jpg",
     "preco": 15.9
+  },
+  {
+    "id": 7,
+    "nome": "Risqué Já Acordou Divando",
+    "descricao": "Esmalte Azul 'Já Acordou Divando' 8 ml - R$ 10.49",
+    "imagem": "../imgs/azuldivando.webp",
+    "preco": 10.49
+  },
+  {
+    "id": 8,
+    "nome": "Risqué Divas No Poder Puro Luxo",
+    "descricao": "Esmalte Roxo Diamond Gel 'Divas No Poder Puro Luxo' 9,5ml - R$16.99",
+    "imagem": "../imgs/divasnopoder.webp",
+    "preco": 16.99
   }
 ]

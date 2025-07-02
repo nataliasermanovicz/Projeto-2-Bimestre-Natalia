@@ -33,12 +33,8 @@
       <label for="produto-descricao">Descrição:</label>
       <input type="text" id="produto-descricao" required />
 
-<label>Imagem (selecione arquivo da pasta imgs):</label>
-<div class="input-file-container">
-  <label for="produto-imagem" class="input-file-label">Escolher arquivo</label>
-  <input type="file" id="produto-imagem" accept="image/*" />
-  <span class="input-file-filename" id="nome-arquivo">Nenhum arquivo selecionado</span>
-</div>
+<label for="produto-imagem-link">Link da Imagem:</label>
+<input type="url" id="produto-imagem-link" placeholder="Cole o link da imagem aqui" required />
 
 
       <label for="produto-preco">Preço:</label>
@@ -92,9 +88,8 @@
       document.getElementById('produto-id').value = produto.id;
       document.getElementById('produto-nome').value = produto.nome;
       document.getElementById('produto-descricao').value = produto.descricao;
-      document.getElementById('produto-imagem').value = '';
+      document.getElementById('produto-imagem-link').value = produto.imagem || '';
       document.getElementById('produto-preco').value = produto.preco;
-      document.getElementById('nome-arquivo').textContent = produto.imagem.split('/').pop();
     }
   }
 
@@ -104,14 +99,25 @@
     const nome = document.getElementById('produto-nome').value.trim();
     const descricao = document.getElementById('produto-descricao').value.trim();
     const preco = parseFloat(document.getElementById('produto-preco').value);
-    const imagemInput = document.getElementById('produto-imagem');
+    const imagemLink = document.getElementById('produto-imagem-link').value.trim();
     let imagem = null;
-    if (imagemInput.files.length > 0) {
-      imagem = '../imgs/' + imagemInput.files[0].name;
+    if (imagemLink) {
+      // Chama backend para baixar imagem e retorna o caminho salvo
+      const resImg = await fetch('http://localhost:3000/api/baixar-imagem', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url: imagemLink })
+      });
+      const dataImg = await resImg.json();
+      if (dataImg.erro) {
+        alert('Erro ao baixar imagem: ' + dataImg.erro);
+        return;
+      }
+      imagem = dataImg.caminho;
     } else if (produtoEditando) {
       imagem = produtoEditando.imagem;
     } else {
-      alert('Selecione uma imagem para o produto.');
+      alert('Informe o link da imagem do produto.');
       return;
     }
     if (!id || !nome || !descricao || isNaN(preco) || !imagem) {
@@ -167,18 +173,9 @@
   function limparFormulario() {
     produtoEditando = null;
     document.getElementById('form-produto').reset();
-    document.getElementById('nome-arquivo').textContent = 'Nenhum arquivo selecionado';
   }
 
-  const inputImagem = document.getElementById('produto-imagem');
-  const nomeArquivoSpan = document.getElementById('nome-arquivo');
-  inputImagem.addEventListener('change', () => {
-    if (inputImagem.files.length > 0) {
-      nomeArquivoSpan.textContent = inputImagem.files[0].name;
-    } else {
-      nomeArquivoSpan.textContent = 'Nenhum arquivo selecionado';
-    }
-  });
+
 
   window.addEventListener('DOMContentLoaded', carregarProdutos);
 </script>
