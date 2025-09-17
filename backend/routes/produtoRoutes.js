@@ -4,8 +4,7 @@ const produtoController = require('../controllers/produtoController');
 
 // CRUD de Produtos
 
-
-router.get('/', produtoController.listarProduto);
+router.get('/', produtoController.listarProdutos);
 router.post('/', produtoController.criarProduto);
 router.get('/:id', produtoController.obterProduto);
 // não tem atualizar produto

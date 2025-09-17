@@ -9,7 +9,7 @@ exports.abrirCrudFuncionario = (req, res) => {
   res.sendFile(path.join(__dirname, '../../frontend/funcionario/funcionario.html'));
 } 
 
-exports.listarFuncionario = async (req, res) => {
+exports.listarFuncionarios = async (req, res) => {
   try {
     const result = await query('SELECT * FROM funcionario ORDER BY PessoaCpfPessoa');
     res.json(result.rows);
@@ -19,7 +19,7 @@ exports.listarFuncionario = async (req, res) => {
   }
 }
 
-exports.criarFuncionario = async (req, res) => {
+exports.criarFuncionarios = async (req, res) => {
   try {
     const { PessoaCpfPessoa, salario, CargosIdCargo } = req.body;
 
@@ -53,7 +53,7 @@ exports.criarFuncionario = async (req, res) => {
   }
 }
 
-exports.obterFuncionario = async (req, res) => {
+exports.obterFuncionarios = async (req, res) => {
   try {
     const cpf = req.params.cpf; // CPF é string
 
@@ -77,7 +77,7 @@ exports.obterFuncionario = async (req, res) => {
   }
 }
 
-exports.atualizarFuncionario = async (req, res) => {
+exports.atualizarFuncionarios = async (req, res) => {
   try {
     const cpf = req.params.cpf;
     const { salario, CargosIdCargo } = req.body;
@@ -107,7 +107,7 @@ exports.atualizarFuncionario = async (req, res) => {
   }
 }
 
-exports.deletarFuncionario = async (req, res) => {
+exports.deletarFuncionarios = async (req, res) => {
   try {
     const cpf = req.params.cpf;
     // Verifica se a funcionario existe

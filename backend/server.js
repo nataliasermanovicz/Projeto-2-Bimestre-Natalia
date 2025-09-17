@@ -1,9 +1,13 @@
 
+const express = require('express');
+const app = express();
 const cookieParser = require('cookie-parser');
 const db = require('./database');
+const path = require('path');
 
 const HOST = 'localhost';
 const PORT_FIXA = 3001;
+
 
 const caminhoFrontend = path.join(__dirname, '../frontend');
 console.log('Caminho frontend:', caminhoFrontend);
