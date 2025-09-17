@@ -1,7 +1,11 @@
+
+
 {
+  "name": "3bimestre-dw1-natalia",
+  "version": "1.0.0",
   "dependencies": {
-    "axios": "^1.10.0",
-    "cors": "^2.8.5",
-    "express": "^5.1.0"
+    "cookie-parser": "^1.4.7",
+    "express": "^5.1.0",
+    "pg": "^8.16.3"
   }
 }
