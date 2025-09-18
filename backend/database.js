@@ -5,7 +5,7 @@ const dbConfig = {
   host: 'localhost',
   port: 5432,
   user: 'postgres',
-  password: 'sermanovicz09',
+  password: 'postgres',
   database: 'dw3bim',
   ssl: false,
   idleTimeoutMillis: 30000,

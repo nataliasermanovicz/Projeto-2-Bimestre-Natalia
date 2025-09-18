@@ -47,10 +47,11 @@ app.use((err, req, res, next) => {
 });
 
 // Rotas
-const menuRoutes = require('./routes/menuRoutes');
-app.use('/menu', menuRoutes);
+//const menuRoutes = require('./routes/menuRoutes');
+//app.use('/menu', menuRoutes);
 const cargoRoutes = require('./routes/cargoRoutes');
 app.use('/cargo', cargoRoutes);
+/*
 const clienteRoutes = require('./routes/clienteRoutes');
 app.use('/cliente', clienteRoutes);
 const pessoaRoutes = require('./routes/pessoaRoutes');
@@ -71,7 +72,7 @@ const FormaDePagamentoRoutes = require('./routes/FormaDePagamentoRoutes');
 app.use('/FormaDePagamento', FormaDePagamentoRoutes);
 const PagamentoHasFormaPagamentoRoutes = require('./routes/PagamentoHasFormaPagamentoRoutes');
 app.use('/PagamentoHasFormaPagamento', PagamentoHasFormaPagamentoRoutes);
-
+*/
 app.get('/', (req, res) => {
   res.json({
     message: 'O server está funcionando - essa é a rota raiz!',

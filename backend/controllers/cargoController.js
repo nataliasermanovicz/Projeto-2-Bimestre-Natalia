@@ -6,7 +6,8 @@ const path = require('path');
 
 exports.abrirCrudCargo = (req, res) => {
   console.log('cargoController - Rota /abrirCrudCargo - abrir o crudCargo');
-  res.sendFile(path.join(__dirname, '../../frontend/cargo/cargo.html'));
+  res.sendFile(path.join(__dirname, '../../html gerente/gerenciar_cargo.html'));
+  //html gerente/gerenciar_cargo.html
 }
 
 exports.listarCargos = async (req, res) => {

@@ -7,9 +7,8 @@ CREATE TABLE Endereco (
     logradouro VARCHAR(100),
     numero VARCHAR(10),
     referencia VARCHAR(45),
-    cep VARCHAR(9),
-    CidadeIdCidade INT
-);  
+    cep VARCHAR(9)
+    );  
 
 CREATE TABLE Pessoa (
     cpfPessoa VARCHAR(20) PRIMARY KEY,
@@ -41,7 +40,7 @@ CREATE TABLE Produto (
     idProduto SERIAL PRIMARY KEY,
     nomeProduto VARCHAR(45),
     quantidadeEmEstoque INT,
-    precoUnitario DOUBLE PRECISION
+    precoUnitario DECIMAL(10, 2)  -- Usando DECIMAL para valores monetários
 );
 
 CREATE TABLE Pedido (
@@ -71,28 +70,29 @@ CREATE TABLE FormaDePagamento (
 );
 
 CREATE TABLE PagamentoHasFormaPagamento (
-    PagamentoIdPedido INT REFERENCES Pagamento(PedidoIdPedido),
+    PagamentoIdPedido INT REFERENCES Pagamento(PedidoIdPedido),  -- Alteração aqui para referenciar a chave primária correta
     FormaPagamentoIdFormaPagamento INT REFERENCES FormaDePagamento(idFormaPagamento),
     valorPago DOUBLE PRECISION,
     PRIMARY KEY (PagamentoIdPedido, FormaPagamentoIdFormaPagamento)
 );
+
 
 -- ======================
 -- POPULAR COM 10 REGISTROS
 -- ======================
 
 -- Endereco
-INSERT INTO Endereco (logradouro, numero, referencia, cep, CidadeIdCidade) VALUES
-('Rua A', '10', 'Próx. praça', '11111-111', 1),
-('Rua B', '20', 'Esquina', '22222-222', 1),
-('Rua C', '30', 'Ao lado do mercado', '33333-333', 2),
-('Rua D', '40', 'Próx. escola', '44444-444', 2),
-('Rua E', '50', 'Próx. hospital', '55555-555', 3),
-('Rua F', '60', 'Centro', '66666-666', 3),
-('Rua G', '70', 'Bairro novo', '77777-777', 4),
-('Rua H', '80', 'Fundos', '88888-888', 4),
-('Rua I', '90', 'Lado direito', '99999-999', 5),
-('Rua J', '100', 'Final da rua', '10101-101', 5);
+INSERT INTO Endereco (logradouro, numero, referencia, cep) VALUES
+('Rua A', '10', 'Próx. praça', '11111-111'),
+('Rua B', '20', 'Esquina', '22222-222'),
+('Rua C', '30', 'Ao lado do mercado', '33333-333'),
+('Rua D', '40', 'Próx. escola', '44444-444'),
+('Rua E', '50', 'Próx. hospital', '55555-555'),
+('Rua F', '60', 'Centro', '66666-666'),
+('Rua G', '70', 'Bairro novo', '77777-777'),
+('Rua H', '80', 'Fundos', '88888-888'),
+('Rua I', '90', 'Lado direito', '99999-999'),
+('Rua J', '100', 'Final da rua', '10101-101');
 
 -- Pessoa
 -- (cpfPessoa, nomePessoa, emailPessoa, senhaPessoa, dataNascimentoPessoa, EnderecoIdEndereco)
@@ -156,7 +156,7 @@ INSERT INTO Produto (nomeProduto, quantidadeEmEstoque, precoUnitario) VALUES
 ('Risqué Preto Sépia', 150, 12.90),
 ('Risqué A.Mar', 300, 16.90),
 ('Risqué Granulado Rosé', 250, 15.90),
-('Risqué Menta.liza', 120, 15.90),
+('Risqué Menta.liza', 120, 15.90);
 
 -- Pedido
 -- (dataDoPedido, ClientePessoaCpfPessoa, FuncionarioPessoaCpfPessoa)
